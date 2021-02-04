@@ -1,3 +1,5 @@
+import time
+import math
 from player import HumanPlayer, RandomComputerPlayer
 
 
@@ -15,7 +17,8 @@ class TicTacToe:
     @staticmethod
     def print_board_nums():
         # 0 | 1 | 2 etc (tells us what number corresponse to what box)
-        number_board = [[str(i) for i in range(j*3), (j+1)*3] for j in range(3)]
+        number_board = [[str(i) for i in range(j*3, (j+1)*3)]
+                        for j in range(3)]
         for row in number_board:
             print('| ' + ' | '.join(row) + ' |')
 
@@ -47,25 +50,25 @@ class TicTacToe:
         row_ind = square // 3
         row = self.board[row_ind*3: (row_ind + 1) * 3]
         # check every spot in a row to see if the letter = the spot
-        if all([spot == letter for spot in row])
-        return True
+        if all([spot == letter for spot in row]):
+            return True
 
         # check column
         col_ind = square % 3
         column = [self.board[col_ind+i*3] for i in range(3)]
-        if all([spot == letter for spot in column])
-        return True
+        if all([spot == letter for spot in column]):
+            return True
 
         # check diagonal
         if square % 2 == 0:
             # top left to bottom right diagonal
             diagonal1 = [self.board[i] for i in [0, 4, 8]]
-            if all([spot == letter for spot in diagonal1])
-            return True
+            if all([spot == letter for spot in diagonal1]):
+                return True
             # top right to bottom left diangonal
             diagonal2 = [self.board[i] for i in [2, 4, 6]]
-            if all([spot == letter for spot in diagonal2])
-            return True
+            if all([spot == letter for spot in diagonal2]):
+                return True
         return False
 
 
@@ -75,11 +78,11 @@ def play(game, x_player, o_player, print_game=True):
         game.print_board_nums()
 
     letter = 'X'  # starting letter
-    # iterate while the still has empty squares
+    # iterate while the game still has empty squares
     while game.empty_squares():
         # get the move from the appropriaet player
-        if letter == 'O'
-        square = o_player.get_move(game)
+        if letter == 'O':
+            square = o_player.get_move(game)
         else:
             square = x_player.get_move(game)
 
@@ -98,12 +101,15 @@ def play(game, x_player, o_player, print_game=True):
             # after we made our move, we need to alternate letters
             letter = 'O' if letter == 'X' else 'X'
 
+        # tiny break
+        time.sleep(0.8)
+
         if print_game:
             print('It\'s a tie!')
 
 
 if __name__ == '__main__':
-    x_player = HumanPlayer('x')
+    x_player = HumanPlayer('X')
     o_player = RandomComputerPlayer('O')
     t = TicTacToe()
     play(t, x_player, o_player, print_game=True)
